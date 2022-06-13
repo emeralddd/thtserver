@@ -1,0 +1,175 @@
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+    "username":"admin",
+    "password":"123",
+    "email":"admin@admin.com",
+    "fullName":"Example"
+}
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "username":"admin",
+    "password":"123"
+}
+
+###
+POST http://localhost:8080/api/teacher/createQuestion
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
+Content-Type: application/json
+
+{
+    "question":"Don't worry, class. Solving this maths problem is by no means a ___ order.",
+    "choices":[
+        "deep",
+        "high",
+        "large",
+        "tall"
+    ],
+    "answer":4,
+    "explanation":"tall order: rất khó để thực hiện",
+    "source":"Đề thi tham khảo THPT 2022 của BGD",
+    "task":"chondapandung",
+    "thematic":"cumtucodinh",
+    "difficulty":3500,
+    "user":{
+        "username":"admin"
+    }
+}
+
+###
+POST http://localhost:8080/api/admin/createTask
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
+Content-Type: application/json
+
+{
+    "tag":"kethopcau",
+    "label":"Kết hợp câu",
+    "statement":"Mark the letter A, B, C or D on your answer sheet to indicate the sentence that best combines each pair of sentences in the following questions."
+}
+
+
+###
+POST http://localhost:8080/api/admin/createThematic
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
+Content-Type: application/json
+
+{
+    "tag":"daongu",
+    "label":"Đảo ngữ",
+    "task":"kethopcau"
+}
+
+###
+POST http://localhost:8080/api/teacher/createText
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjUzMjM4MTY4LCJleHAiOjE2NTM4NDI5Njh9.MHvMv8esmhM-0HfPHKVhN1oCJOvqLD3zgtz0FDjKdq8
+Content-Type: application/json
+
+{
+    "text":"",
+    "questions":[
+        {
+            "question":"We are ___ to hear that you are leaving.",
+            "choices":[
+                "sadly",
+                "sad",
+                "sadden",
+                "sadness"
+            ],
+            "answer":1,
+            "explanation":"Cấu trúc S + be + adj + to V, chỉ có sad là adj.",
+            "source":"Đề thi tham khảo THPT 2022 của BGD",
+            "task":"chondapandung",
+            "thematic":"tuloai",
+            "difficulty":1000,
+            "user":{
+                "username":"admin"
+            }
+        },
+        {
+            "question":"1 chon tieu de=?.",
+            "choices":[
+                "5",
+                "6",
+                "7",
+                "8"
+            ],
+            "answer":2,
+            "explanation":"Cấu trúc S + be + adj + to V, chỉ có sad là adj.",
+            "source":"Đề thi tham khảo THPT 2022 của BGD",
+            "task":"dochieu",
+            "thematic":"tieude",
+            "difficulty":1000,
+            "user":{
+                "username":"admin"
+            }
+        }
+    ],
+    "source":"abc",
+    "task":"dochieu",
+    "difficulty":2000
+}
+
+###
+POST http://localhost:8080/api/teacher/addContest
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
+Content-Type: application/json
+
+{
+    "tag":"minhhoa2022",
+    "title":"Đề thi tham khảo THPT 2022 của BGD",
+    "time":60,
+    "difficulty":400,
+    "task":[
+        {
+            "tag":"chondapandung",
+            "text":"",
+            "questions": [
+                "62a5aeb65b4b9320e6505a53",
+                "62a5af1e5b4b9320e6505a5a",
+                "62a5b05c5b4b9320e6505a60"
+            ]
+        }
+    ]
+}
+
+###
+POST http://localhost:8080/api/teacher/createLesson
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjUzMjM4MTY4LCJleHAiOjE2NTM4NDI5Njh9.MHvMv8esmhM-0HfPHKVhN1oCJOvqLD3zgtz0FDjKdq8
+Content-Type: application/json
+
+{
+    "tag":"lesson1",
+    "title":"Bai giang 1",
+    "content":"jgdkgjdifjd fsds  dsf dsf df sf d dsd f dsf sd dsf df dsf dsd fds fd dfs d f ds"
+}
+
+###
+PUT http://localhost:4000/api/admin/updateDeadlineStatus/bns_01
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjM2MjI2NGJlZmIxZTI3ZDBhYmEzMjkiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjQ3NzE1MTI3LCJleHAiOjE2NDgzMTk5Mjd9.RRBnuSPGPShZ4j3DOvzT-MW6SkYZrAI_ayOrd2qjgew
+Content-Type: application/json
+
+{
+    "finished":true,
+    "cmt":"abc"
+}
+
+###
+//admin2
+PUT http://localhost:4000/api/admin/updateDeadlineStatus/bns_01
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjM2MjRmZWE4ZTZlOGQ2YTgwNWNkOTIiLCJ1c2VybmFtZSI6ImFkbWluMiIsImlhdCI6MTY0NzcxNzQ0MiwiZXhwIjoxNjQ4MzIyMjQyfQ.5n-fRCaNz5ZH3LeUIwTMmqNiD5WUm0eHimkN9rCsUN0
+Content-Type: application/json
+
+{
+    "finished":true,
+    "cmt":"abcd"
+}
+
+###
+GET http://localhost:4000/api/admin/getUnverifyUser
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjM3ZjIxNWE1M2QxN2I2MjkyYWRlNzciLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjQ5NTMxODI4LCJleHAiOjE2NTAxMzY2Mjh9.h6ylKqipNteAIlOIvtjeNXHs9An3g5CxSWhK8xosjeo
+Content-Type: application/json
