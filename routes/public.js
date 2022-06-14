@@ -114,6 +114,8 @@ router.get('/getLessons', async (req, res) => {
     }
 })
 
+
+
 router.get('/getTasks', async (req, res) => {
     try {
         const foundTask = await tasks.find({})
@@ -219,6 +221,31 @@ router.get('/getContests', async (req, res) => {
         const foundContest = await contests.find({})
 
         // console.log(foundTask)
+
+        res.json({
+            success: true,
+            message: SUCCESS,
+            payload: foundContest
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            success: false,
+            message: ERROR_500
+        })
+    }
+})
+
+router.get('/zzz', async (req, res) => {
+    try {
+        const foundContest = await questions.find({})
+
+        let arr = []
+        for(const i of foundContest) {
+            arr.push(i._id.toString())
+        }
+
+        console.log(arr)
 
         res.json({
             success: true,

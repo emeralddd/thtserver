@@ -5,7 +5,7 @@
             "tag":"phatam",
             "thematics":[
                 {
-                    "tag":"ed",
+                    "tag":"duoied",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -15,7 +15,7 @@
                     
                 },
                 {
-                    "tag":"nguyenam",
+                    "tag":"nguyenamphuam",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -30,7 +30,7 @@
             "tag":"trongam",
             "thematics":[
                 {
-                    "tag":"2at",
+                    "tag":"2amtiet",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -40,7 +40,7 @@
                     
                 },
                 {
-                    "tag":"3at",
+                    "tag":"3amtiet",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -51,10 +51,10 @@
             ]
         },
         {
-            "tag":"chondapan",
+            "tag":"chondapandung",
             "thematics":[
                 {
-                    "tag":"tagques",
+                    "tag":"cauhoiduoi",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -63,7 +63,7 @@
                     ]
                 },
                 {
-                    "tag":"preposition",
+                    "tag":"gioitu",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -81,7 +81,7 @@
                     ]
                 },
                 {
-                    "tag":"bidong",
+                    "tag":"caubidong",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -90,7 +90,7 @@
                     ]
                 },
                 {
-                    "tag":"trattutt",
+                    "tag":"trattutinhtu",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -126,7 +126,7 @@
                     ]
                 },
                 {
-                    "tag":"rgmdtn",
+                    "tag":"mdtn",
                     "detail":[
                         {
                             "difficulty":3000,
@@ -144,7 +144,7 @@
                     ]
                 },
                 {
-                    "tag":"phrasalverb",
+                    "tag":"cumdongtu",
                     "detail":[
                         {
                             "difficulty":3000,
@@ -153,7 +153,7 @@
                     ]
                 },
                 {
-                    "tag":"collocation",
+                    "tag":"cumtucodinh",
                     "detail":[
                         {
                             "difficulty":3000,
@@ -162,7 +162,7 @@
                     ]
                 },
                 {
-                    "tag":"idioms",
+                    "tag":"thanhngu",
                     "detail":[
                         {
                             "difficulty":4000,
@@ -171,7 +171,7 @@
                     ]
                 },
                 {
-                    "tag":"vocab",
+                    "tag":"tuvung1",
                     "detail":[
                         {
                             "difficulty":3000,
@@ -186,10 +186,10 @@
             ]
         },
         {
-            "tag":"closest",
+            "tag":"dongnghia",
             "thematics":[
                 {
-                    "tag":"tudon",
+                    "tag":"tudon1",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -205,10 +205,10 @@
             ]
         },
         {
-            "tag":"opposite",
+            "tag":"trainghia",
             "thematics":[
                 {
-                    "tag":"tudon",
+                    "tag":"tudon2",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -217,7 +217,7 @@
                     ]
                 },
                 {
-                    "tag":"phrasalverbidioms",
+                    "tag":"cumtuthanhngu",
                     "detail":[
                         {
                             "difficulty":4000,
@@ -228,7 +228,7 @@
             ]
         },
         {
-            "tag":"communication",
+            "tag":"giaotiep",
             "thematics":[
                 {
                     "tag":"thgt",
@@ -245,7 +245,7 @@
             "tag":"docdientu",
             "thematics":[
                 {
-                    "tag":"ltttlk",
+                    "tag":"lientutrangtulk",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -263,7 +263,7 @@
                     ]
                 },
                 {
-                    "tag":"tuvung",
+                    "tag":"tuvung2",
                     "detail":[
                         {
                             "difficulty":3000,
@@ -287,7 +287,7 @@
             ]
         },
         {
-            "tag":"dochieu1",
+            "tag":"dochieudoanvan",
             "thematics":[
                 {
                     "tag":"mainidea",
@@ -299,7 +299,7 @@
                     ]
                 },
                 {
-                    "tag":"truefalse",
+                    "tag":"truenotrue",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -326,7 +326,7 @@
                     ]
                 },
                 {
-                    "tag":"chtuvung",
+                    "tag":"tv",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -337,7 +337,7 @@
             ]
         },
         {
-            "tag":"dochieu2",
+            "tag":"dochieudoanvan",
             "thematics":[
                 {
                     "tag":"mainidea",
@@ -349,7 +349,7 @@
                     ]
                 },
                 {
-                    "tag":"truefalse",
+                    "tag":"truenotrue",
                     "detail":[
                         {
                             "difficulty":3000,
@@ -376,7 +376,7 @@
                     ]
                 },
                 {
-                    "tag":"chtuvung",
+                    "tag":"tv",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -403,7 +403,7 @@
             "tag":"timloisai",
             "thematics":[
                 {
-                    "tag":"thidt",
+                    "tag":"thi",
                     "detail":[
                         {
                             "difficulty":1000,
@@ -412,7 +412,7 @@
                     ]
                 },
                 {
-                    "tag":"quychieu",
+                    "tag":"pqc",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -421,7 +421,7 @@
                     ]
                 },
                 {
-                    "tag":"tuvungs",
+                    "tag":"tuvung3",
                     "detail":[
                         {
                             "difficulty":4000,
@@ -435,7 +435,7 @@
             "tag":"caudongnghia",
             "thematics":[
                 {
-                    "tag":"cdthi",
+                    "tag":"cdt",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -444,7 +444,7 @@
                     ]
                 },
                 {
-                    "tag":"tuongthuat",
+                    "tag":"ctt",
                     "detail":[
                         {
                             "difficulty":2000,
@@ -467,7 +467,7 @@
             "tag":"kethopcau",
             "thematics":[
                 {
-                    "tag":"cauuocdieukien",
+                    "tag":"cauuoccaudieukien",
                     "detail":[
                         {
                             "difficulty":3000,

@@ -208,6 +208,8 @@ router.post('/addText', verifyToken, async (req, res) => {
 
             qu.user = foundUser
 
+            qu.text=text
+
             const newData = new Questions(qu)
     
             await newData.save()
