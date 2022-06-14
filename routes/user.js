@@ -36,52 +36,54 @@ router.post('/generateContest', verifyToken, async (req, res) => {
     }
 })
 
-router.get('/getContest/:_id', verifyToken, async (req, res) => {
-    const _id = req.params._id
+router.get('/getContest/:tagor_id', verifyToken, async (req, res) => {
+    const tagor_id = req.params.tagor_id
 
     try {
-        const foundContest = contests.findById(_id)
+        let type=1
+        let foundContest = await contests.findOne({tagor_id}).lean()
+
         if(!foundContest) {
-            return res.status(404).json({
-                success: false,
-                message: NOT_FOUND
-            })
+            foundContest = await ccontests.findById(tagor_id)
+
+            if(!foundContest) {
+                return res.status(404).json({
+                    success: false,
+                    message: NOT_FOUND
+                })
+            }   
+            type=0
         }
 
+        let index=0
+
         //get all information
+        for(let j=0; j<foundContest.task.length; j++) {
+            const task=foundContest.task[j]
+            const foundTask = await tasks.findOne({tag:task.tag}).select("statement")
+            foundContest.task[j].statement = foundTask.statement
+            for(let i=0; i<task.questions.length; i++) {
+                const foundQuestion = await questions.findById(task.questions[i]).lean()
+                
+                foundQuestion.index=index
+                
+                foundContest.task[j].questions[i]=foundQuestion
+
+                index++
+            }
+        }
+        //
+
+        foundContest.type=type
+
+        foundContest.number=index+1
+
+        // console.log(foundContest)
 
         res.json({
             success: true,
             message: SUCCESS,
             payload: foundContest
-        })
-    } catch (err) {
-        console.log(err)
-        return res.status(500).json({
-            success: false,
-            message: ERROR_500
-        })
-    }
-})
-
-router.get('/getCContest/:_id', verifyToken, async (req, res) => {
-    const _id = req.params._id
-
-    try {
-        const foundCContest = ccontests.findById(_id)
-        if(!foundCContest) {
-            return res.status(404).json({
-                success: false,
-                message: NOT_FOUND
-            })
-        }
-
-        //get all information
-
-        res.json({
-            success: true,
-            message: SUCCESS,
-            payload: foundCContest
         })
     } catch (err) {
         console.log(err)
@@ -103,7 +105,7 @@ router.post('/submitContest', verifyToken, async (req, res) => {
     }
 
     try {
-        const foundContest = type ? contests.findById(_id) : ccontests.findById(_id)
+        let foundContest = type ? await contests.findById(_id).lean() : await ccontests.findById(_id).lean()
 
         if(!foundContest) {
             return res.status(404).json({
@@ -112,15 +114,20 @@ router.post('/submitContest', verifyToken, async (req, res) => {
             })
         }
 
+        // console.log(submitedAnswer)
+
         let correctAnswer=0
         let index=0
         for(let j=0; j<foundContest.task.length; j++) {
             const task=foundContest.task[j]
-            for(let i=0; i<task.length; i++) {
-                const foundQuestion = questions.findById(task[i])
+            const foundTask = await tasks.findOne({tag:task.tag}).select("statement")
+            foundContest.task[j].statement = foundTask.statement
+            for(let i=0; i<task.questions.length; i++) {
+                const foundQuestion = await questions.findById(task.questions[i]).lean()
                 if(submitedAnswer[index] === foundQuestion.answer) correctAnswer++
                 index++
-                foundContest.task[j][i]=foundQuestion
+                foundQuestion.index=index
+                foundContest.task[j].questions[i]=foundQuestion
             }
         }
 
@@ -132,7 +139,7 @@ router.post('/submitContest', verifyToken, async (req, res) => {
             correctAnswer
         })
 
-        await newLog.save()
+        // await newLog.save()
 
         res.json({
             success: true,
@@ -140,7 +147,8 @@ router.post('/submitContest', verifyToken, async (req, res) => {
             payload: {
                 submitedAnswer,
                 contestData: foundContest,
-                correctAnswer
+                correctAnswer,
+                number:index
             }
         })
     } catch (err) {
