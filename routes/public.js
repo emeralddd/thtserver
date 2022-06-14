@@ -69,9 +69,11 @@ router.get('/getLesson/:tag', async (req, res) => {
     const tag = req.params.tag
 
     try {
-        let foundLesson = await lessons.findOne({tag})
+        // console.log(tag)
 
-        foundLesson.user = await users.findOne({_id:foundLesson.user})
+        let foundLesson = await lessons.findOne({tag}).lean()
+
+        // console.log(foundLesson)
         
         if(!foundLesson) {
             return res.status(404).json({
@@ -79,6 +81,8 @@ router.get('/getLesson/:tag', async (req, res) => {
                 message: NOT_FOUND
             })
         }
+        
+        foundLesson.user = await users.findById(foundLesson.user).select('-password')
 
         res.json({
             success: true,

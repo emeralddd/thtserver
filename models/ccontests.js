@@ -15,6 +15,10 @@ const CContest = new Schema({
             type: Number,
             required:true
         },
+        time: {
+            type: Number,
+            required:true
+        },
         title: {
             type: String,
             required: true

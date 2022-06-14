@@ -42,6 +42,15 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:8080/api/user/getContest/62a8d2e0c4c992270d805f7a
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
+Content-Type: application/json
+
+{
+    "difficulty":0
+}
+
+###
 POST http://localhost:8080/api/admin/createTask
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
 Content-Type: application/json
