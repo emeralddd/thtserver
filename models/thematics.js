@@ -10,10 +10,6 @@ const Thematic = new Schema({
             type:String,
             required:true
         },
-        questions: [{
-            type: Schema.Types.ObjectId,
-            ref: 'questions'
-        }],
         task: {
             type: String,
             required: true

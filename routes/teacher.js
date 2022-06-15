@@ -16,7 +16,7 @@ const Questions = require('../models/questions')
 const users = require('../models/users')
 const tasks = require('../models/tasks')
 const thematics = require('../models/thematics')
-const { MISSING_DATA, ERROR_500, MISSING_PERMISSION, WRONG_DATA, SUCCESS, TAG_EXIST, ERROR505OR404 } = require('../VariableName')
+const { MISSING_DATA, ERROR_500, MISSING_PERMISSION, WRONG_DATA, SUCCESS, TAG_EXIST, ERROR505OR404, WRONG_ACCOUNT } = require('../VariableName')
 const texts = require('../models/texts')
 const lessons = require('../models/lessons')
 const contests = require('../models/contests')
@@ -125,16 +125,10 @@ router.post('/addQuestion', verifyToken, async (req, res) => {
             task,
             thematic,
             difficulty,
-            user: foundUser
+            user: foundUser.username
         })
 
         await newData.save()
-
-        const foundThematic = questionResult.foundThematic
-
-        foundThematic.questions.push(newData)
-
-        await foundThematic.save()
 
         res.json({
             success: true,
@@ -143,6 +137,7 @@ router.post('/addQuestion', verifyToken, async (req, res) => {
         })
 
     } catch(err) {
+        console.log(err)
         res.status(500).json({
             success: false,
             message: ERROR_500
@@ -202,10 +197,6 @@ router.post('/addText', verifyToken, async (req, res) => {
         let questionsArray = []
         
         for(let qu of questions) {
-            const foundThematic = await thematics.findOne({tag:qu.thematic})
-
-            // console.log(qu)
-
             qu.user = foundUser
 
             qu.text=text
@@ -213,12 +204,6 @@ router.post('/addText', verifyToken, async (req, res) => {
             const newData = new Questions(qu)
     
             await newData.save()
-    
-            foundThematic.questions.push(newData)
-
-            questionsArray.push(newData)
-    
-            await foundThematic.save()
         }
 
         // console.log(questionsArray)
@@ -359,6 +344,65 @@ router.post('/addContest', verifyToken, async (req, res) => {
         })
 
         await newData.save()
+
+        res.json({
+            success: true,
+            message: SUCCESS,
+            payload: newData
+        })
+
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: ERROR_500
+        })
+    }
+})
+
+router.put('/updateQuestion', verifyToken, async (req, res) => {
+    const {_id,question,choices,answer,explanation,source,task,thematic,difficulty,text} = req.body
+
+    try {
+        const questionResult = await checkValidQuestion(req.body)
+
+        if(!questionResult.json.success) {
+            return res.status(questionResult.code).json(questionResult.json)
+        }
+        
+        const id = req.executor._id
+
+        const foundUser = await users.findById(id)
+
+        if(!foundUser) {
+            return res.status(400).json({
+                success: false,
+                message: WRONG_ACCOUNT
+            })
+        }
+
+        if(foundUser.admin<2) {
+            return res.status(403).json({
+                success: false,
+                message: MISSING_PERMISSION
+            })
+        }
+
+        const newData = await Questions.findByIdAndUpdate(_id
+        ,{
+            question,
+            choices,
+            answer,
+            explanation,
+            source,
+            task,
+            thematic,
+            difficulty,
+            text,
+            user: foundUser.username
+        },{
+            new:true
+        })
 
         res.json({
             success: true,

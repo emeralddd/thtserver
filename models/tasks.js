@@ -13,11 +13,7 @@ const Task = new Schema({
         statement: {
             type: String,
             required: true
-        },
-        thematics: [{
-            type: Schema.Types.ObjectId,
-            ref: 'thematics'
-        }]
+        }
     }
 )
 module.exports = mongo.model('tasks',Task)

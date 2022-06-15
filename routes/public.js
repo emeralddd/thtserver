@@ -242,14 +242,11 @@ router.get('/getContests', async (req, res) => {
 
 router.get('/zzz', async (req, res) => {
     try {
-        const foundContest = await questions.find({})
-
-        let arr = []
-        for(const i of foundContest) {
-            arr.push(i._id.toString())
-        }
-
-        console.log(arr)
+        const foundContest = await questions.updateMany({},{
+            user:'admin'
+        },{
+            new:true
+        })
 
         res.json({
             success: true,
