@@ -144,7 +144,7 @@ router.get('/getTask/:tag', async (req, res) => {
     const tag = req.params.tag
 
     try {
-        let foundTask = await tasks.findOne({tag})
+        let foundTask = await tasks.findOne({tag}).lean()
 
         if(!foundTask) {
             return res.status(404).json({
@@ -173,7 +173,7 @@ router.get('/getThematics', async (req, res) => {
     try {
         const foundThematic = await thematics.find({})
 
-        // console.log(foundTask)
+        // const foundQuestions = await questions.find({thematic:})
 
         res.json({
             success: true,
@@ -195,7 +195,7 @@ router.get('/getThematic/:tag', async (req, res) => {
     console.log(tag)
 
     try {
-        let foundThematic = await thematics.findOne({tag})
+        let foundThematic = await thematics.findOne({tag}).lean()
 
         if(!foundThematic) {
             return res.status(404).json({
