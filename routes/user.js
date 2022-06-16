@@ -7,13 +7,13 @@ const Questions = require('../models/questions')
 const users = require('../models/users')
 const tasks = require('../models/tasks')
 const thematics = require('../models/thematics')
-const { MISSING_DATA, ERROR_500, MISSING_PERMISSION, WRONG_DATA, SUCCESS, TAG_EXIST, ERROR505OR404, NOT_FOUND } = require('../VariableName')
 const texts = require('../models/texts')
 const lessons = require('../models/lessons')
 const contests = require('../models/contests')
 const ccontests = require('../models/ccontests')
-const questions = require('../models/questions')
 const logs = require('../models/logs')
+
+const { MISSING_DATA, ERROR_500, MISSING_PERMISSION, WRONG_DATA, SUCCESS, TAG_EXIST, ERROR505OR404, NOT_FOUND } = require('../VariableName')
 
 router.post('/generateContest', verifyToken, async (req, res) => {
     const {difficulty} = req.body
@@ -28,23 +28,29 @@ router.post('/generateContest', verifyToken, async (req, res) => {
     try {
         const thptqgFormat = require('../data/thptqgFormat.json')
         const spanTasks = thptqgFormat.tasks
-        let task = []
+        const task = []
 
         let a=5
 
         for(const t of spanTasks) {
-            let e = {}
+            const e = {}
             e.tag=t.tag
             e.questions=[]
-            if(t.tag === 'docdientu') {
+            if(t.tag === 'docdientu' || t.tag ==='dochieudoanvan') {
+
+                const filter = {
+                    task:t.tag,
+                    difficulty: {
+                        $gte: difficulty,
+                        $lt: difficulty+100
+                    }
+                }
+
+                if(t.tag === 'dochieudoanvan') filter.number = a
+
                 const q = await texts.aggregate([
                     { 
-                        $match: {
-                            task:'docdientu',
-                            difficulty: {
-                                $gte: difficulty 
-                            }
-                        }
+                        $match: filter
                     },
                     {
                         $sample: {
@@ -53,59 +59,24 @@ router.post('/generateContest', verifyToken, async (req, res) => {
                     }
                 ])
 
-                // console.log(difficulty)
+                e.text = q[0]._id
 
-                // console.log(q)
+                const q_id = await Questions.find({text:q[0]._id}).select('_id').lean()
 
-                e.text = q[0].text
+                for(let i=0; i<q_id.length; i++)
+                    e.questions.push(q_id[i]._id.toString())
 
-                for(let i=0; i<q[0].questions.length; i++) {
-                    q[0].questions[i]=q[0].questions[i].toString()
-                }
-
-                e.questions = q[0].questions
-
-                // console.log(q)
-                
-            } else if(t.tag === 'dochieudoanvan') {
-                const q = await texts.aggregate([
-                    { 
-                        $match: {
-                            task:'dochieudoanvan',
-                            difficulty: {
-                                $gte: difficulty 
-                            },
-                            number: a
-                        }
-                    },
-                    {
-                        $sample: {
-                            size: 1
-                        }
-                    }
-                ])
-
-                e.text = q[0].text
-
-                for(let i=0; i<q[0].questions.length; i++) {
-                    q[0].questions[i]=q[0].questions[i].toString()
-                }
-
-                e.questions = q[0].questions
-
-                if(a===5) a=7
-
-                // console.log(e)
+                if(t.tag === 'dochieudoanvan' && a===5) a=7
             } else {
-                // if(t.tag !=='phatam') continue
                 for(const ec of t.thematics) {
                     for(const d of ec.detail) {
-                        const q = await questions.aggregate([
+                        const q = await Questions.aggregate([
                             { 
                                 $match: {
                                     thematic:ec.tag,
                                     difficulty: {
-                                        $gte: difficulty+d.difficulty 
+                                        $gte: difficulty+d.difficulty,
+                                        $lt: difficulty+d.difficulty+100
                                     }
                                 }
                             },
@@ -115,8 +86,6 @@ router.post('/generateContest', verifyToken, async (req, res) => {
                                 }
                             }
                         ])
-
-                        // console.log(q)
 
                         for(const i of q) {
                             e.questions.push(i._id.toString())
@@ -169,7 +138,8 @@ router.get('/getContest/:tagor_id', verifyToken, async (req, res) => {
                     success: false,
                     message: NOT_FOUND
                 })
-            }   
+            }
+
             type=0
         }
 
@@ -178,10 +148,15 @@ router.get('/getContest/:tagor_id', verifyToken, async (req, res) => {
         //get all information
         for(let j=0; j<foundContest.task.length; j++) {
             const task=foundContest.task[j]
-            const foundTask = await tasks.findOne({tag:task.tag}).select("statement")
+            const foundTask = await tasks.findOne({tag:task.tag}).select("statement").lean()
             foundContest.task[j].statement = foundTask.statement
+
+            if(foundContest.task[j].text) {
+                foundContest.task[j].text = await texts.findById(foundContest.task[j].text).select("text source").lean()
+            }
+
             for(let i=0; i<task.questions.length; i++) {
-                const foundQuestion = await questions.findById(task.questions[i]).lean()
+                const foundQuestion = await Questions.findById(task.questions[i]).lean()
                 
                 foundQuestion.index=index
                 
@@ -194,9 +169,7 @@ router.get('/getContest/:tagor_id', verifyToken, async (req, res) => {
 
         foundContest.type=type
 
-        foundContest.number=index+1
-
-        console.log(foundContest)
+        foundContest.number=index
 
         res.json({
             success: true,
@@ -213,7 +186,7 @@ router.get('/getContest/:tagor_id', verifyToken, async (req, res) => {
 })
 
 router.post('/submitContest', verifyToken, async (req, res) => {
-    const {_id,submitedAnswer,type} = req.body
+    const {_id,submitedAnswer,type,contest} = req.body
 
     if(!_id || !submitedAnswer) {
         return res.status(401).json({
@@ -223,29 +196,13 @@ router.post('/submitContest', verifyToken, async (req, res) => {
     }
 
     try {
-        let foundContest = type ? await contests.findById(_id).lean() : await ccontests.findById(_id).lean()
-
-        if(!foundContest) {
-            return res.status(404).json({
-                success: false,
-                message: NOT_FOUND
-            })
-        }
-
-        // console.log(submitedAnswer)
-
         let correctAnswer=0
         let index=0
-        for(let j=0; j<foundContest.task.length; j++) {
-            const task=foundContest.task[j]
-            const foundTask = await tasks.findOne({tag:task.tag}).select("statement")
-            foundContest.task[j].statement = foundTask.statement
+        for(let j=0; j<contest.task.length; j++) {
+            const task=contest.task[j]
             for(let i=0; i<task.questions.length; i++) {
-                const foundQuestion = await questions.findById(task.questions[i]).lean()
-                if(submitedAnswer[index] === foundQuestion.answer) correctAnswer++
+                if(submitedAnswer[index] === task.questions[i].answer) correctAnswer++
                 index++
-                foundQuestion.index=index
-                foundContest.task[j].questions[i]=foundQuestion
             }
         }
 
@@ -264,7 +221,7 @@ router.post('/submitContest', verifyToken, async (req, res) => {
             message: SUCCESS,
             payload: {
                 submitedAnswer,
-                contestData: foundContest,
+                contestData: contest,
                 correctAnswer,
                 number:index
             }

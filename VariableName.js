@@ -24,4 +24,4 @@ module.exports.MISSING_DATA = 'Thiếu thông tin!'
 
 module.exports.WRONG_DATA = 'Dữ liệu không hợp lệ!'
 
-module.exports.TAG_EXIST = 'Nã đã tồn tại!'
+module.exports.TAG_EXIST = 'Mã đã tồn tại!'

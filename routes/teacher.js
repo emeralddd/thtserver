@@ -20,6 +20,7 @@ const { MISSING_DATA, ERROR_500, MISSING_PERMISSION, WRONG_DATA, SUCCESS, TAG_EX
 const texts = require('../models/texts')
 const lessons = require('../models/lessons')
 const contests = require('../models/contests')
+const { findByIdAndUpdate } = require('../models/contests')
 
 const checkValidQuestion = async(qu) => {
     const {question,choices,answer,explanation,task,thematic,difficulty} = qu
@@ -45,7 +46,7 @@ const checkValidQuestion = async(qu) => {
     }
 
     try {  
-        const foundTask = await tasks.findOne({tag:task})
+        const foundTask = await tasks.findOne({tag:task}).lean()
 
         if(!foundTask) {
             return {
@@ -57,7 +58,7 @@ const checkValidQuestion = async(qu) => {
             }
         }
 
-        const foundThematic = await thematics.findOne({tag:thematic})
+        const foundThematic = await thematics.findOne({tag:thematic}).lean()
 
         if(!foundThematic) {
             return {
@@ -89,7 +90,7 @@ const checkValidQuestion = async(qu) => {
 }
 
 router.post('/addQuestion', verifyToken, async (req, res) => {
-    const {question,choices,answer,explanation,source,task,thematic,difficulty} = req.body
+    const {question,choices,answer,explanation,source,task,text,thematic,difficulty} = req.body
 
     try { 
         const questionResult = await checkValidQuestion(req.body)
@@ -100,7 +101,7 @@ router.post('/addQuestion', verifyToken, async (req, res) => {
         
         const {_id} = req.executor
 
-        const foundUser = await users.findById(_id)
+        const foundUser = await users.findById(_id).lean()
 
         if(!foundUser) {
             return res.status(400).json({
@@ -125,6 +126,7 @@ router.post('/addQuestion', verifyToken, async (req, res) => {
             task,
             thematic,
             difficulty,
+            text,
             user: foundUser.username
         })
 
@@ -146,10 +148,9 @@ router.post('/addQuestion', verifyToken, async (req, res) => {
 })
 
 router.post('/addText', verifyToken, async (req, res) => {
-    const {text,questions,source,task,difficulty} = req.body
+    const {text,source,task,difficulty} = req.body
 
-    if(!text || !questions || !task || !difficulty) {
-        // console.log('abc')
+    if(!text || !task || !difficulty) {
         return res.status(400).json({
             success: false,
             message: MISSING_DATA
@@ -157,15 +158,7 @@ router.post('/addText', verifyToken, async (req, res) => {
     }
 
     try {
-        for(const qu of questions) {
-            const questionResult = await checkValidQuestion(qu)
-    
-            if(!questionResult.json.success) {
-                return res.status(questionResult.code).json(questionResult.json)
-            }
-        }
-
-        const foundTask = await tasks.findOne({task})
+        const foundTask = await tasks.findOne({task}).lean()
 
         if(!foundTask) {
             return res.status(400).json({
@@ -176,7 +169,7 @@ router.post('/addText', verifyToken, async (req, res) => {
 
         const {_id} = req.executor
 
-        const foundUser = await users.findById(_id)
+        const foundUser = await users.findById(_id).lean()
 
         if(!foundUser) {
             return res.status(400).json({
@@ -192,33 +185,14 @@ router.post('/addText', verifyToken, async (req, res) => {
             })
         }
 
-        // console.log(questions)
-
-        let questionsArray = []
-        
-        for(let qu of questions) {
-            qu.user = foundUser
-
-            qu.text=text
-
-            const newData = new Questions(qu)
-    
-            await newData.save()
-        }
-
-        // console.log(questionsArray)
-
         const newData = new texts({
             text,
-            questions:questionsArray,
             source,
             task,
             difficulty
         })
 
         await newData.save()
-
-        
 
         res.json({
             success: true,
@@ -246,7 +220,7 @@ router.post('/addLesson', verifyToken, async (req, res) => {
     }
 
     try { 
-        const foundLesson = await lessons.findOne({tag})
+        const foundLesson = await lessons.findOne({tag}).lean()
 
         if(foundLesson) {
             return res.status(400).json({
@@ -257,7 +231,7 @@ router.post('/addLesson', verifyToken, async (req, res) => {
         
         const {_id} = req.executor
 
-        const foundUser = await users.findById(_id)
+        const foundUser = await users.findById(_id).select('username').lean()
 
         if(!foundUser) {
             return res.status(400).json({
@@ -277,7 +251,7 @@ router.post('/addLesson', verifyToken, async (req, res) => {
             tag,
             title,
             content,
-            user: foundUser
+            user: foundUser.username
         })
 
         await newData.save()
@@ -400,6 +374,138 @@ router.put('/updateQuestion', verifyToken, async (req, res) => {
             difficulty,
             text,
             user: foundUser.username
+        },{
+            new:true
+        })
+
+        res.json({
+            success: true,
+            message: SUCCESS,
+            payload: newData
+        })
+
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: ERROR_500
+        })
+    }
+})
+
+router.put('/updateLesson', verifyToken, async (req, res) => {
+    const {_id,tag,title,content} = req.body
+
+    if(!_id || !tag || !title || !content) {
+        return res.status(400).json({
+            success: false,
+            message: MISSING_DATA
+        })
+    }
+
+    try { 
+        const foundLesson = await lessons.findById(_id).lean()
+
+        if(!foundLesson) {
+            return res.status(400).json({
+                success: false,
+                message: WRONG_DATA
+            })
+        }
+        
+        const id = req.executor._id
+
+        const foundUser = await users.findById(id).select('username').lean()
+
+        if(!foundUser) {
+            return res.status(400).json({
+                success: false,
+                message: WRONG_ACCOUNT
+            })
+        }
+
+        if(foundUser.admin<2) {
+            return res.status(403).json({
+                success: false,
+                message: MISSING_PERMISSION
+            })
+        }
+
+        // console.log(_id)
+
+        const newData = await lessons.findByIdAndUpdate(_id,
+            {
+            title,
+            content,
+            tag
+        },{
+            new:true
+        }).lean()
+
+        // console.log(newData)
+
+        res.json({
+            success: true,
+            message: SUCCESS,
+            payload: newData
+        })
+
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: ERROR_500
+        })
+    }
+})
+
+router.put('/updateContest', verifyToken, async (req, res) => {
+    const {_id,task,tag,title,time,difficulty} = req.body
+
+    if(!_id || !task || !tag || !title || !difficulty ||!time) {
+        return res.status(400).json({
+            success: false,
+            message: MISSING_DATA
+        })
+    }
+
+    try {
+        const foundContest = await contests.findById(_id).lean()
+
+        if(!foundContest) {
+            return res.status(400).json({
+                success: false,
+                message: TAG_EXIST
+            })
+        }
+
+        const id = req.executor._id
+
+        const foundUser = await users.findById(id).select('username').lean()
+
+        if(!foundUser) {
+            return res.status(400).json({
+                success: false,
+                message: WRONG_ACCOUNT
+            })
+        }
+
+        if(foundUser.admin<2) {
+            return res.status(403).json({
+                success: false,
+                message: MISSING_PERMISSION
+            })
+        }
+
+        // console.log(_id)
+
+        const newData = await contests.findByIdAndUpdate(_id,
+        {
+            tag,
+            title,
+            time,
+            difficulty,
+            task
         },{
             new:true
         })

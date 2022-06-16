@@ -6,10 +6,6 @@ const Text = new Schema({
             type: String,
             required:true
         },
-        questions: [{
-            type: Schema.Types.ObjectId,
-            ref: 'questions'
-        }],
         source: {
             type: String,
         },

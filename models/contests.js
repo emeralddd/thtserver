@@ -21,7 +21,10 @@ const Contest = new Schema({
         },
         task: [{
             tag: String,
-            text: String,
+            text: {
+                text:String,
+                source:String
+            },
             questions: Array
         }]
     }

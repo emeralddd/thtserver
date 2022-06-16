@@ -259,13 +259,12 @@ Content-Type: application/json
 }
 
 ###
-PUT http://localhost:4000/api/admin/updateDeadlineStatus/bns_01
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjM2MjI2NGJlZmIxZTI3ZDBhYmEzMjkiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjQ3NzE1MTI3LCJleHAiOjE2NDgzMTk5Mjd9.RRBnuSPGPShZ4j3DOvzT-MW6SkYZrAI_ayOrd2qjgew
+POST http://localhost:8080/api/user/generateContest
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
 Content-Type: application/json
 
 {
-    "finished":true,
-    "cmt":"abc"
+    "difficulty":0
 }
 
 ###
