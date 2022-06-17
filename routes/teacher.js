@@ -20,7 +20,6 @@ const { MISSING_DATA, ERROR_500, MISSING_PERMISSION, WRONG_DATA, SUCCESS, TAG_EX
 const texts = require('../models/texts')
 const lessons = require('../models/lessons')
 const contests = require('../models/contests')
-const { findByIdAndUpdate } = require('../models/contests')
 
 const checkValidQuestion = async(qu) => {
     const {question,choices,answer,explanation,task,thematic,difficulty} = qu
@@ -150,7 +149,7 @@ router.post('/addQuestion', verifyToken, async (req, res) => {
 router.post('/addText', verifyToken, async (req, res) => {
     const {text,source,task,difficulty} = req.body
 
-    if(!text || !task || !difficulty) {
+    if(!text || !task || (difficulty !==0 && !difficulty)) {
         return res.status(400).json({
             success: false,
             message: MISSING_DATA
@@ -167,9 +166,9 @@ router.post('/addText', verifyToken, async (req, res) => {
             })
         }
 
-        const {_id} = req.executor
+        const id = req.executor._id
 
-        const foundUser = await users.findById(_id).lean()
+        const foundUser = await users.findById(id).lean()
 
         if(!foundUser) {
             return res.status(400).json({
@@ -506,6 +505,68 @@ router.put('/updateContest', verifyToken, async (req, res) => {
             time,
             difficulty,
             task
+        },{
+            new:true
+        })
+
+        res.json({
+            success: true,
+            message: SUCCESS,
+            payload: newData
+        })
+
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: ERROR_500
+        })
+    }
+})
+
+router.put('/updateText', verifyToken, async (req, res) => {
+    const {_id,text,source,task,difficulty} = req.body
+
+    if(!text || !task || !difficulty) {
+        return res.status(400).json({
+            success: false,
+            message: MISSING_DATA
+        })
+    }
+
+    try {
+        const foundTask = await tasks.findOne({task}).lean()
+
+        if(!foundTask) {
+            return res.status(400).json({
+                success: false,
+                message: WRONG_DATA
+            })
+        }
+
+        const id = req.executor._id
+
+        const foundUser = await users.findById(id).lean()
+
+        if(!foundUser) {
+            return res.status(400).json({
+                success: false,
+                message: WRONG_ACCOUNT
+            })
+        }
+
+        if(foundUser.admin<2) {
+            return res.status(403).json({
+                success: false,
+                message: MISSING_PERMISSION
+            })
+        }
+
+        const newData = await texts.findByIdAndUpdate(_id,{
+            text,
+            source,
+            task,
+            difficulty
         },{
             new:true
         })

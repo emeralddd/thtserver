@@ -25,10 +25,7 @@ const CContest = new Schema({
         },
         task: [{
             tag: String,
-            text: {
-                text:String,
-                source:String
-            },
+            text: String,
             questions: Array
         }]
     }

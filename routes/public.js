@@ -44,6 +44,13 @@ router.get('/getQuestion/:_id', async (req, res) => {
                 message: NOT_FOUND
             })
         }
+        
+        const foundText = foundQuestion.text? await texts.findById(foundQuestion.text).select('text source').lean() : {
+            text:'',
+            source:''
+        }
+
+        foundQuestion.text=foundText
 
         res.json({
             success: true,
@@ -236,6 +243,24 @@ router.get('/zzz', async (req, res) => {
             success: true,
             message: SUCCESS,
             payload: q
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            success: false,
+            message: ERROR_500
+        })
+    }
+})
+
+router.get('/getTexts', async (req, res) => {
+    try {
+        const foundTexts = await texts.find({}).lean()
+        // console.log('abc')
+        res.json({
+            success: true,
+            message: SUCCESS,
+            payload: foundTexts
         })
     } catch (err) {
         console.log(err)

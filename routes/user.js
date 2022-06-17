@@ -36,20 +36,21 @@ router.post('/generateContest', verifyToken, async (req, res) => {
             const e = {}
             e.tag=t.tag
             e.questions=[]
+            e.text=''
             if(t.tag === 'docdientu' || t.tag ==='dochieudoanvan') {
 
                 const filter = {
                     task:t.tag,
                     difficulty: {
-                        $gte: difficulty,
-                        $lt: difficulty+100
+                        $gte: difficulty
+                        // $lt: difficulty+100
                     }
                 }
 
                 if(t.tag === 'dochieudoanvan') filter.number = a
 
                 const q = await texts.aggregate([
-                    { 
+                    {
                         $match: filter
                     },
                     {
@@ -59,12 +60,21 @@ router.post('/generateContest', verifyToken, async (req, res) => {
                     }
                 ])
 
-                e.text = q[0]._id
+                // console.log(t.tag)
+                // console.log(q[0]._id)
 
-                const q_id = await Questions.find({text:q[0]._id}).select('_id').lean()
+                e.text = q[0]._id.toString()
+
+                console.log(q[0]._id.toString())
+
+                const q_id = await Questions.find({text:q[0]._id.toString()}).select('_id').lean()
+
+                console.log(q_id)
 
                 for(let i=0; i<q_id.length; i++)
                     e.questions.push(q_id[i]._id.toString())
+
+                console.log(e.questions)
 
                 if(t.tag === 'dochieudoanvan' && a===5) a=7
             } else {
@@ -75,8 +85,8 @@ router.post('/generateContest', verifyToken, async (req, res) => {
                                 $match: {
                                     thematic:ec.tag,
                                     difficulty: {
-                                        $gte: difficulty+d.difficulty,
-                                        $lt: difficulty+d.difficulty+100
+                                        $gte: difficulty+d.difficulty
+                                        // $lt: difficulty+d.difficulty+100
                                     }
                                 }
                             },
@@ -129,6 +139,8 @@ router.get('/getContest/:tagor_id', verifyToken, async (req, res) => {
     try {
         let type=1
         let foundContest = await contests.findOne({tag:tagor_id}).lean()
+        
+        console.log(foundContest)
 
         if(!foundContest) {
             foundContest = await ccontests.findById(tagor_id).lean()
@@ -153,7 +165,14 @@ router.get('/getContest/:tagor_id', verifyToken, async (req, res) => {
 
             if(foundContest.task[j].text) {
                 foundContest.task[j].text = await texts.findById(foundContest.task[j].text).select("text source").lean()
+            } else {
+                foundContest.task[j].text = {
+                    text:'',
+                    source:''
+                }
             }
+
+            // console.log(foundContest)
 
             for(let i=0; i<task.questions.length; i++) {
                 const foundQuestion = await Questions.findById(task.questions[i]).lean()
