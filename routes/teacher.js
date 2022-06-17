@@ -147,7 +147,7 @@ router.post('/addQuestion', verifyToken, async (req, res) => {
 })
 
 router.post('/addText', verifyToken, async (req, res) => {
-    const {text,source,task,difficulty} = req.body
+    const {text,source,task,difficulty,number} = req.body
 
     if(!text || !task || (difficulty !==0 && !difficulty)) {
         return res.status(400).json({
@@ -188,7 +188,8 @@ router.post('/addText', verifyToken, async (req, res) => {
             text,
             source,
             task,
-            difficulty
+            difficulty,
+            number
         })
 
         await newData.save()

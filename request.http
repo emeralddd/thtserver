@@ -63,7 +63,7 @@ Content-Type: application/json
 
 
 ###
-GET http://localhost:8080/api/public/zzz
+GET http://localhost:8080/api/public/zzz/docdientu/luongtu/2
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
 Content-Type: application/json
 
@@ -90,138 +90,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5O
 Content-Type: application/json
 
 {
-    "text":"As the Internet has become more and more popular, we may be reading a great deal more than we used to.However, the way we are reading materials on the Internet, or online reading, is very different from the way we traditionally read printed materials.<br />In the traditional way of reading, we would start at the beginning of a book and read through to the end. In online reading, in contrast, we start reading a page, but may never finish it because a link on that page leads us to a passage on a different page, and so on. As we go from one page to another, we have to remember lots of different ideas at the same time. This new way of reading is quite different from the traditional one.<br />There are both advantages and disadvantages of online reading. In online reading, the brain gets better than ever at doing many <u>tasks</u> at the same time, or multitasking; and thanks to this, we can work quickly and think creatively. Multitasking is useful in certain working environments, but it also makes it more difficult for us to read at a deep level. We are, therefore, much less likely to analyse what we read in a critical way, or gain any real <u>insight</u> into the contents we are reading. This might lead to a future when a whole new generation lacks the ability to think critically and deeply about what they are reading.<br />The world is changing and our brains are probably changing to meet new demands in the modern world, just as they have always done throughout history.However, it is important for us to consider how to maintain our critical, deeper reading skills, while still dealing with online reading materials.",
-    "questions":[
-        {
-            "question":"What of the following is the best title for the passage?",
-            "choices":[
-                "More Reading, Less Analysis?",
-                "is Technology Changing Writing?",
-                "Less Reading, More Problems?",
-                "Is Reading Changing Technology?"
-            ],
-            "answer":1,
-            "explanation":"In the traditional way of reading, we would start at the beginning of a book and read through to the end. In online reading, in contrast, we start reading a page, but may never finish it because a link on that page leads us to a passage on a different page, and so onWe are, therefore, much less likely to analyse what we read in a critical way, or gain any real insight into the contents we are reading.However, it is important for us to consider how to maintain our critical, deeper reading skills, while still dealing with online reading materials.",
-            "source":"Đề thi tham khảo THPT 2022 của BGD",
-            "task":"dochieudoanvan",
-            "thematic":"mainidea",
-            "difficulty":3000,
-            "user":{
-                "username":"admin"
-            }
-        },
-        {
-            "question":"According to paragraph 2, as we read a page online, we ___",
-            "choices":[
-                "may not finish reading the whole page",
-                "always read from the beginning till the end",
-                "never read the first part of the page",
-                "tend to read the last part before anything else"
-            ],
-            "answer":1,
-            "explanation":"In the traditional way of reading, we would start at the beginning of a book and read through to the end. In online reading, in contrast, we start reading a page, but may never finish it because a link on that page leads us to a passage on a different page, and so on.",
-            "source":"Đề thi tham khảo THPT 2022 của BGD",
-            "task":"dochieudoanvan",
-            "thematic":"ttct",
-            "difficulty":3100,
-            "user":{
-                "username":"admin"
-            }
-        },
-        {
-            "question":"The word <u>tasks</u> in paragraph 3 is closest in meaning to ___.",
-            "choices":[
-                "interviews",
-                "exams",
-                "jobs",
-                "talks"
-            ],
-            "answer":3,
-            "explanation":"tasks = jobs: công việc",
-            "source":"Đề thi tham khảo THPT 2022 của BGD",
-            "task":"dochieudoanvan",
-            "thematic":"tv",
-            "difficulty":2300,
-            "user":{
-                "username":"admin"
-            }
-        },
-        {
-            "question":"The word <u>it</u> in paragraph 3 refers to ___.",
-            "choices":[
-                "what we read",
-                "online reading",
-                "multitasking",
-                "the brain"
-            ],
-            "answer":3,
-            "explanation":"multitasking được thay thế bởi it",
-            "source":"Đề thi tham khảo THPT 2022 của BGD",
-            "task":"dochieudoanvan",
-            "thematic":"quychieu",
-            "difficulty":2100,
-            "user":{
-                "username":"admin"
-            }
-        },
-        {
-            "question":"They word <p>insight</p> in paragraph 3 is closest is meaning to ___",
-            "choices":[
-                "status",
-                "understanding",
-                "respect",
-                "attitude"
-            ],
-            "answer":2,
-            "explanation":"insight = understanding: hiểu",
-            "source":"Đề thi tham khảo THPT 2022 của BGD",
-            "task":"dochieudoanvan",
-            "thematic":"tv",
-            "difficulty":3200,
-            "user":{
-                "username":"admin"
-            }
-        },
-        {
-            "question":"Which of the following is NOT true according to the passage?",
-            "choices":[
-                "We read online materials in the same way as we read printed materials.",
-                "Possibly our brains are changing to meet new demands in the modern world.",
-                "Multitasking enables us to work quickly and think creatively.",
-                "In the traditional way of reading, we would read from the beginning through to the end."
-            ],
-            "answer":1,
-            "explanation":"However, the way we are reading materials on the Internet, or online reading, is very different from the way we traditionally read printed materials.",
-            "source":"Đề thi tham khảo THPT 2022 của BGD",
-            "task":"dochieudoanvan",
-            "thematic":"truenotrue",
-            "difficulty":3300,
-            "user":{
-                "username":"admin"
-            }
-        },
-        {
-            "question":"Which of the following can be inferred from the passage?",
-            "choices":[
-                "The brain does not play an important role in the traditional way of reading.",
-                "The traditional way of reading allows people to read at a deep level.",
-                "We used to read much more in the past than we do now.",
-                "Online reading maintains critical and deeper reading skills."
-            ],
-            "answer":2,
-            "explanation":"There are both advantages and disadvantages of online reading. In online reading, the brain gets better than ever at doing many tasks at the same time, or multitasking; and thanks to this, we can work quickly and think creatively. Multitasking is useful in certain working environments, but it also makes it more difficult for us to read at a deep level. We are, therefore, much less likely to analyse what we read in a critical way, or gain any real insight into the contents we are reading. This might lead to a future when a whole new generation lacks the ability to think critically and deeply about what they are reading.",
-            "source":"Đề thi tham khảo THPT 2022 của BGD",
-            "task":"dochieudoanvan",
-            "thematic":"suyluan",
-            "difficulty":4000,
-            "user":{
-                "username":"admin"
-            }
-        }
-    ],
-    "source":"Adapted from Insight by Roberts and Sayer",
+    "text":"",
+    "source":"Lorem Ipsum",
     "task":"dochieudoanvan",
-    "difficulty":3000
+    "difficulty":100,
+    "number":5
 }
 
 ###

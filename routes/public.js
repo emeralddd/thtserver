@@ -225,33 +225,60 @@ router.get('/getContests', async (req, res) => {
     }
 })
 
-router.get('/zzz', async (req, res) => {
-    try {
-        // const foundContest = await questions.updateMany({},{
-        //     user:'admin'
-        // },{
-        //     new:true
-        // })
+// router.get('/zzz/:task/:thematic/:diff', async (req, res) => {
+//     try {
+//         const abc = [
+//             '',
+//             '62ac19b3b1acdb8b01a21241',
+//             '62ac15dcb1acdb8b01a21228',
+//             '62ac162ab1acdb8b01a2122c',
+//             '62ac15b0b1acdb8b01a21224',
+//             '',
+//             '62ac1666b1acdb8b01a21230',
+//             '62ac1754b1acdb8b01a2123c',
+//             '62ac1689b1acdb8b01a21234',
+//             '62ac16fab1acdb8b01a21238'
+//         ]
+//         // for(let j=1; j<5; j++)
+//         const task = req.params.task
+//         // const diff = req.params.diff
+//         const thematic = req.params.thematic
+//         const j=req.params.diff
+//         // for(const te of abc)
+//         // for(let k=0; k<=2; k++)
+//         for(let i=0; i<10; i++) {
+//             const k=0
+//             if(abc[i]==='') continue
+//             const newData = new questions({
+//                 question: `question-${task}-${thematic}-${j*1000+i*100+k*10}`,
+//                 choices: [
+//                     `choice-a-${task}-${thematic}-${j*1000+i*100+k*10}`,
+//                     `choice-b-${task}-${thematic}-${j*1000+i*100+k*10}`,
+//                     `choice-c-${task}-${thematic}-${j*1000+i*100+k*10}`,
+//                     `choice-d-${task}-${thematic}-${j*1000+i*100+k*10}`
+//                 ],
+//                 answer: Math.floor(Math.random()*4)+1,
+//                 explanation:`explanation-${task}-${thematic}-${j*1000+i*100+k*10}`,
+//                 source:'testing-system',
+//                 task,
+//                 thematic,
+//                 difficulty:j*1000+i*100+k*10,
+//                 text:abc[i],
+//                 user:'admin'
+//             })
 
-        const q = await (await questions.find({task:'phatam'}).select('_id')).lean().toString()
-        
-        // lean()
+//             await newData.save()
 
-        console.log(q)
-
-        res.json({
-            success: true,
-            message: SUCCESS,
-            payload: q
-        })
-    } catch (err) {
-        console.log(err)
-        return res.status(500).json({
-            success: false,
-            message: ERROR_500
-        })
-    }
-})
+//             console.log(i)
+//         }
+//     } catch (err) {
+//         console.log(err)
+//         return res.status(500).json({
+//             success: false,
+//             message: ERROR_500
+//         })
+//     }
+// })
 
 router.get('/getTexts', async (req, res) => {
     try {

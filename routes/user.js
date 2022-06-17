@@ -42,8 +42,8 @@ router.post('/generateContest', verifyToken, async (req, res) => {
                 const filter = {
                     task:t.tag,
                     difficulty: {
-                        $gte: difficulty
-                        // $lt: difficulty+100
+                        $gte: difficulty,
+                        $lt: t.tag ==='docdientu' ? difficulty+100 : 900
                     }
                 }
 
@@ -85,8 +85,8 @@ router.post('/generateContest', verifyToken, async (req, res) => {
                                 $match: {
                                     thematic:ec.tag,
                                     difficulty: {
-                                        $gte: difficulty+d.difficulty
-                                        // $lt: difficulty+d.difficulty+100
+                                        $gte: difficulty+d.difficulty,
+                                        $lt: difficulty+d.difficulty+100
                                     }
                                 }
                             },
