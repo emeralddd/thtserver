@@ -155,3 +155,12 @@ Content-Type: application/json
 GET http://localhost:4000/api/admin/getUnverifyUser
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjM3ZjIxNWE1M2QxN2I2MjkyYWRlNzciLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjQ5NTMxODI4LCJleHAiOjE2NTAxMzY2Mjh9.h6ylKqipNteAIlOIvtjeNXHs9An3g5CxSWhK8xosjeo
 Content-Type: application/json
+
+###
+GET http://localhost:8080/api/public/zzz
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjhhNjk5OGJhYWY0MTUwYjRlYzdiNTUiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNjU1MDIyODQxLCJleHAiOjE2NTU2Mjc2NDF9.C1VR_GatWQce9ZTNAiRzPy8PtX_5USJypC47DzghEHU
+Content-Type: application/json
+
+{
+
+}

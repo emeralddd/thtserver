@@ -42,8 +42,8 @@ router.post('/generateContest', verifyToken, async (req, res) => {
                 const filter = {
                     task:t.tag,
                     difficulty: {
-                        $gte: difficulty,
-                        $lt: t.tag ==='docdientu' ? difficulty+100 : 900
+                        $gte: difficulty
+                        // $lt: t.tag ==='docdientu' ? difficulty+100 : 900
                     }
                 }
 
@@ -65,16 +65,16 @@ router.post('/generateContest', verifyToken, async (req, res) => {
 
                 e.text = q[0]._id.toString()
 
-                console.log(q[0]._id.toString())
+                // console.log(q[0]._id.toString())
 
                 const q_id = await Questions.find({text:q[0]._id.toString()}).select('_id').lean()
 
-                console.log(q_id)
+                // console.log(q_id)
 
                 for(let i=0; i<q_id.length; i++)
                     e.questions.push(q_id[i]._id.toString())
 
-                console.log(e.questions)
+                // console.log(e.questions)
 
                 if(t.tag === 'dochieudoanvan' && a===5) a=7
             } else {
@@ -140,7 +140,7 @@ router.get('/getContest/:tagor_id', verifyToken, async (req, res) => {
         let type=1
         let foundContest = await contests.findOne({tag:tagor_id}).lean()
         
-        console.log(foundContest)
+        // console.log(foundContest)
 
         if(!foundContest) {
             foundContest = await ccontests.findById(tagor_id).lean()

@@ -1,6 +1,8 @@
 require('dotenv').config()
 const express = require('express')
 const router = express.Router()
+const docx = require("docx")
+const {Paragraph,TextRun} = require("docx")
 
 const verifyToken = require('../middleware/auth')
 
@@ -297,5 +299,72 @@ router.get('/getTexts', async (req, res) => {
         })
     }
 })
+
+// router.get('/zzz', async (req, res) => {
+//     try {
+//         const doc = {
+//             sections: [{
+//                 properties: {},
+//                 children: [
+//                     new Paragraph({
+//                         children: [
+//                             new TextRun("Hello World"),
+//                             new TextRun({
+//                                 text: "Foo Bar",
+//                                 bold: true,
+//                             }),
+//                             new TextRun({
+//                                 text: "\tGithub is the best",
+//                                 bold: true,
+//                             }),
+//                         ],
+//                     }),
+//                 ],
+//             }],
+//         }
+
+//         // console.log(doc)
+
+//         // const hallo = await docx.Packer.toBlob(doc)
+
+//         // docx.
+
+//         res.json({
+//             success: true,
+//             message: SUCCESS,
+//             payload: JSON.stringify(doc)
+//         })
+//     } catch (err) {
+//         console.log(err)
+//         return res.status(500).json({
+//             success: false,
+//             message: ERROR_500
+//         })
+//     }
+// })
+
+// router.get('/zzz', async (req, res) => {
+//     try {
+//         for(let i=41; i<=49; i++) {
+//             await questions.deleteMany({
+//                 difficulty: i*100+10
+//             })
+//             await questions.deleteMany({
+//                 difficulty: i*100+20
+//             })
+//         }
+
+//         res.json({
+//             success: true,
+//             message: SUCCESS,
+//         })
+//     } catch (err) {
+//         console.log(err)
+//         return res.status(500).json({
+//             success: false,
+//             message: ERROR_500
+//         })
+//     }
+// })
 
 module.exports = router
