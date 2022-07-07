@@ -1,12 +1,3 @@
-//Edit question
-//Delete question
-
-//Edit text
-//Delete text
-
-//Edit lesson
-//Delete lesson
-
 require('dotenv').config()
 const express = require('express')
 const router = express.Router()
@@ -22,9 +13,9 @@ const lessons = require('../models/lessons')
 const contests = require('../models/contests')
 
 const checkValidQuestion = async(qu) => {
-    const {question,choices,answer,explanation,task,thematic,difficulty} = qu
+    const {question,choices,answer,task,thematic,difficulty} = qu
 
-    if(!question || !choices || !answer || !explanation || !task || !thematic || !difficulty) {
+    if(!question || !choices || !answer || !task || !thematic || !difficulty) {
         return {
             code: 400,
             json: {
@@ -34,7 +25,7 @@ const checkValidQuestion = async(qu) => {
         }
     }
 
-    if(answer<1 || answer>4) {
+    if(answer<1 || answer>4 || difficulty%1000!==0) {
         return {
             code: 400,
             json: {
@@ -44,7 +35,7 @@ const checkValidQuestion = async(qu) => {
         }
     }
 
-    try {  
+    try {
         const foundTask = await tasks.findOne({tag:task}).lean()
 
         if(!foundTask) {
@@ -147,9 +138,9 @@ router.post('/addQuestion', verifyToken, async (req, res) => {
 })
 
 router.post('/addText', verifyToken, async (req, res) => {
-    const {text,source,task,difficulty,number} = req.body
+    const {text,source,task,number} = req.body
 
-    if(!text || !task || (difficulty !==0 && !difficulty)) {
+    if(!text || !task) {
         return res.status(400).json({
             success: false,
             message: MISSING_DATA
@@ -188,7 +179,6 @@ router.post('/addText', verifyToken, async (req, res) => {
             text,
             source,
             task,
-            difficulty,
             number
         })
 
@@ -272,9 +262,9 @@ router.post('/addLesson', verifyToken, async (req, res) => {
 })
 
 router.post('/addContest', verifyToken, async (req, res) => {
-    const {task,tag,title,time,difficulty} = req.body
+    const {task,tag,title,time} = req.body
 
-    if(!task || !tag || !title || !difficulty ||!time) {
+    if(!task || !tag || !title ||!time) {
         return res.status(400).json({
             success: false,
             message: MISSING_DATA
@@ -313,7 +303,6 @@ router.post('/addContest', verifyToken, async (req, res) => {
             tag,
             title,
             time,
-            difficulty,
             task
         })
 
@@ -460,9 +449,9 @@ router.put('/updateLesson', verifyToken, async (req, res) => {
 })
 
 router.put('/updateContest', verifyToken, async (req, res) => {
-    const {_id,task,tag,title,time,difficulty} = req.body
+    const {_id,task,tag,title,time} = req.body
 
-    if(!_id || !task || !tag || !title || !difficulty ||!time) {
+    if(!_id || !task || !tag || !title ||!time) {
         return res.status(400).json({
             success: false,
             message: MISSING_DATA
@@ -497,14 +486,10 @@ router.put('/updateContest', verifyToken, async (req, res) => {
             })
         }
 
-        // console.log(_id)
-
-        const newData = await contests.findByIdAndUpdate(_id,
-        {
+        const newData = await contests.findByIdAndUpdate(_id,{
             tag,
             title,
             time,
-            difficulty,
             task
         },{
             new:true
@@ -526,9 +511,9 @@ router.put('/updateContest', verifyToken, async (req, res) => {
 })
 
 router.put('/updateText', verifyToken, async (req, res) => {
-    const {_id,text,source,task,difficulty} = req.body
+    const {_id,text,source,task} = req.body
 
-    if(!text || !task || !difficulty) {
+    if(!text || !task) {
         return res.status(400).json({
             success: false,
             message: MISSING_DATA
@@ -566,8 +551,7 @@ router.put('/updateText', verifyToken, async (req, res) => {
         const newData = await texts.findByIdAndUpdate(_id,{
             text,
             source,
-            task,
-            difficulty
+            task
         },{
             new:true
         })
@@ -576,6 +560,48 @@ router.put('/updateText', verifyToken, async (req, res) => {
             success: true,
             message: SUCCESS,
             payload: newData
+        })
+
+    } catch(err) {
+        console.log(err)
+        res.status(500).json({
+            success: false,
+            message: ERROR_500
+        })
+    }
+})
+
+router.delete('/deleteQuestion/:_id', verifyToken, async (req, res) => {
+    const _id = req.params._id
+
+    // console.log(req.body)
+
+    try { 
+        const id = req.executor._id
+
+        const foundUser = await users.findById(id).lean()
+
+        if(!foundUser) {
+            return res.status(400).json({
+                success: false,
+                message: WRONG_ACCOUNT
+            })
+        }
+
+        if(foundUser.admin<2) {
+            return res.status(403).json({
+                success: false,
+                message: MISSING_PERMISSION
+            })
+        }
+
+        await Questions.findByIdAndRemove(_id)
+
+        // console.log(_id)
+
+        res.json({
+            success: true,
+            message: SUCCESS
         })
 
     } catch(err) {

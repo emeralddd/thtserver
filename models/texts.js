@@ -15,10 +15,6 @@ const Text = new Schema({
         },
         number: {
             type: Number
-        },
-        difficulty: {
-            type: Number,
-            required:true
         }
     }
 )

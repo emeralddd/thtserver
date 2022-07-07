@@ -15,10 +15,6 @@ const Contest = new Schema({
             type: Number,
             required:true
         },
-        difficulty: {
-            type: Number,
-            required:true
-        },
         task: [{
             tag: String,
             text: String,

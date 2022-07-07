@@ -11,10 +11,6 @@ const CContest = new Schema({
             default: Date.now(),
             required:true
         },
-        difficulty: {
-            type: Number,
-            required:true
-        },
         time: {
             type: Number,
             required:true

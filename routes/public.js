@@ -345,12 +345,14 @@ router.get('/getTexts', async (req, res) => {
 
 // router.get('/zzz', async (req, res) => {
 //     try {
-//         for(let i=41; i<=49; i++) {
-//             await questions.deleteMany({
-//                 difficulty: i*100+10
-//             })
-//             await questions.deleteMany({
-//                 difficulty: i*100+20
+//         const ques = await questions.find({}).select('_id difficulty').lean()
+
+//         console.log(ques[0])
+
+//         for(let i=0; i<ques.length; i++) {
+//             const {_id,difficulty} = ques[i]
+//             await questions.findByIdAndUpdate(_id,{
+//                 difficulty:Math.floor(difficulty/1000)*1000
 //             })
 //         }
 
