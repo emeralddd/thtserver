@@ -137,7 +137,7 @@ router.post('/createThematic', verifyToken, async (req, res) => {
 
         await newData.save()
 
-        console.log(foundTask)
+        // console.log(foundTask)
 
         foundTask.thematics.push(newData)
 

@@ -264,7 +264,7 @@ router.post('/generateCustomFormat', verifyToken, async (req, res) => {
     }
 
     try {
-        console.log(thematics)
+        // console.log(thematics)
 
         const span = []
         const id = []
@@ -272,121 +272,104 @@ router.post('/generateCustomFormat', verifyToken, async (req, res) => {
 
         for(const thematic of thematics) {
             if(thematic.thematic==='docdientu'||thematic.thematic==='dochieudoanvan') {
-                continue
-            }
-            const foundTask = await Thematics.findOne({tag:thematic.thematic}).select('task').lean()
-            // console.log(foundTask)
-            if(!id[foundTask.task]) {
-                id[foundTask.task]=++z
                 span.push({
-                    task:foundTask.task,
-                    thematics: [thematic]
+                    task:thematic.thematic
                 })
+                z++
             } else {
-                span[id[foundTask.task]-1].thematics.push(thematic)
+                const foundTask = await Thematics.findOne({tag:thematic.thematic}).select('task').lean()
+                // console.log(foundTask)
+                if(!id[foundTask.task]) {
+                    id[foundTask.task]=++z
+                    span.push({
+                        task:foundTask.task,
+                        thematics: [thematic]
+                    })
+                } else {
+                    span[id[foundTask.task]-1].thematics.push(thematic)
+                }
             }
+            
         }
 
-        console.log(span)
+        // console.log(span)
 
-        // for(const i of span) {
-        //     console.log(i)
-        // }
+        const findQuestions = (t) => new Promise(async(resolve, reject) => {
+            const e = {}
+            e.tag=t.task
+            e.questions=[]
+            e.text=''
+            if(t.task === 'docdientu' || t.task ==='dochieudoanvan') {
+                const q = await texts.aggregate([
+                    {
+                        $match: {
+                            task: t.task
+                        }
+                    },
+                    {
+                        $sample: {
+                            size: 1
+                        }
+                    }
+                ])
 
-        // const task = []
+                e.text = q[0]._id.toString()
 
-        // let a=5
+                const q_id = await Questions.find({text:q[0]._id.toString()}).select('_id').lean()
 
-        // for(const t of spanTasks) {
-        //     const e = {}
-        //     e.tag=t.tag
-        //     e.questions=[]
-        //     e.text=''
-        //     if(t.tag === 'docdientu' || t.tag ==='dochieudoanvan') {
+                for(let i=0; i<q_id.length; i++)
+                    e.questions.push(q_id[i]._id.toString())
+            } else {
+                for(const ec of t.thematics) {
+                    for(const d of ec.difficulties) {
+                        // console.log(`${ec.thematic} - ${d.difficulty}`)
+                        const q = await Questions.aggregate([
+                            { 
+                                $match: {
+                                    thematic: ec.thematic,
+                                    difficulty: d.difficulty,
+                                }
+                            },
+                            {
+                                $sample: {
+                                    size: d.number
+                                }
+                            }
+                        ])
 
-        //         const filter = {
-        //             task:t.tag,
-        //             difficulty: {
-        //                 $gte: difficulty
-        //                 // $lt: t.tag ==='docdientu' ? difficulty+100 : 900
-        //             }
-        //         }
+                        for(const i of q) {
+                            e.questions.push(i._id.toString())
+                        }
+                    }
+                }
+            }
 
-        //         if(t.tag === 'dochieudoanvan') filter.number = a
+            resolve(e)
+        })
 
-        //         const q = await texts.aggregate([
-        //             {
-        //                 $match: filter
-        //             },
-        //             {
-        //                 $sample: {
-        //                     size: 1
-        //                 }
-        //             }
-        //         ])
+        const actions = []
 
-        //         // console.log(t.tag)
-        //         // console.log(q[0]._id)
+        for(const t of span) {
+            actions.push(findQuestions(t))
+        }
 
-        //         e.text = q[0]._id.toString()
+        const task = await Promise.all(actions)
 
-        //         // console.log(q[0]._id.toString())
+        const contests=await ccontests.count({username: req.executor.username})
 
-        //         const q_id = await Questions.find({text:q[0]._id.toString()}).select('_id').lean()
+        const newContest = new ccontests({
+            username: req.executor.username,
+            title: `${req.executor.username} #${contests+1}`,
+            time,
+            task
+        })
 
-        //         // console.log(q_id)
-
-        //         for(let i=0; i<q_id.length; i++)
-        //             e.questions.push(q_id[i]._id.toString())
-
-        //         // console.log(e.questions)
-
-        //         if(t.tag === 'dochieudoanvan' && a===5) a=7
-        //     } else {
-        //         for(const ec of t.thematics) {
-        //             for(const d of ec.detail) {
-        //                 const q = await Questions.aggregate([
-        //                     { 
-        //                         $match: {
-        //                             thematic:ec.tag,
-        //                             difficulty: {
-        //                                 $gte: difficulty+d.difficulty,
-        //                                 $lt: difficulty+d.difficulty+100
-        //                             }
-        //                         }
-        //                     },
-        //                     {
-        //                         $sample: {
-        //                             size: d.number
-        //                         }
-        //                     }
-        //                 ])
-
-        //                 for(const i of q) {
-        //                     e.questions.push(i._id.toString())
-        //                 }
-        //             }
-        //         }
-        //     }
-
-        //     task.push(e)
-        // }
-
-        // const contests=await ccontests.count({username: req.executor.username})
-        // const newContest = new ccontests({
-        //     username: req.executor.username,
-        //     difficulty,
-        //     title: `${req.executor.username} #${contests+1}`,
-        //     time: thptqgFormat.time,
-        //     task
-        // })
-
-        // await newContest.save()
+        await newContest.save()
 
         res.json({
             success: true,
-            message: SUCCESS
-            // payload: newContest._id
+            message: SUCCESS,
+            payload: newContest._id
         })
         
     } catch (err) {
