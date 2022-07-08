@@ -511,7 +511,7 @@ router.put('/updateContest', verifyToken, async (req, res) => {
 })
 
 router.put('/updateText', verifyToken, async (req, res) => {
-    const {_id,text,source,task} = req.body
+    const {_id,text,source,task,number} = req.body
 
     if(!text || !task) {
         return res.status(400).json({
@@ -551,7 +551,8 @@ router.put('/updateText', verifyToken, async (req, res) => {
         const newData = await texts.findByIdAndUpdate(_id,{
             text,
             source,
-            task
+            task,
+            number
         },{
             new:true
         })

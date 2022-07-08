@@ -15,8 +15,7 @@ const Question = new Schema({
             required:true
         },
         explanation: {
-            type: String,
-            required:true
+            type: String
         },
         source: {
             type: String,
